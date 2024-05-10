@@ -1,14 +1,13 @@
-import './App.css'
-import { Export } from './features/export/Export'
+import './App.css';
+import { Export } from './features/export/Export';
 
 function App() {
-
   return (
     <>
       <h1>Proget Export</h1>
-      <Export/>
+      <Export />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
