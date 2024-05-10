@@ -1,12 +1,12 @@
 export interface Card {
-    resourceType: string,
+    resourceType: 'Bug' | 'UserStory' | 'Feature',
     id: number,
     name: string
 }
 
-export async function loadProgetEntity(token: string, cardType: string, cardNumber: string, select: string) {
-    const response = await fetch(`https://smartwebs.tpondemand.com/api/v2/${cardType}/${cardNumber}?` + new URLSearchParams({
-        select,
+export async function loadReleaseEntity(token: string, cardNumber: string) {
+    const response = await fetch(`https://cors-anywhere-ten-zeta.vercel.app/smartwebs.tpondemand.com/api/v2/Release/${cardNumber}?` + new URLSearchParams({
+        select: '{bugs, userstories, features}',
         access_token: token,
     }), {
         method: 'GET'
@@ -17,6 +17,24 @@ export async function loadProgetEntity(token: string, cardType: string, cardNumb
         },
         userStories: {
             items: Card[]
+        },
+        features: {
+            items: Card[]
         }
+    };
+}
+
+export async function loadEntity(token: string, type: 'Bug' | 'UserStory' | 'Feature' , cardNumber: string) {
+    const response = await fetch(`https://cors-anywhere-ten-zeta.vercel.app/smartwebs.tpondemand.com/api/v2/${type}/${cardNumber}?` + new URLSearchParams({
+        select: '{assignments:assignments.select({generalUser.fullName,roleName:role.name})}',
+        access_token: token,
+    }), {
+        method: 'GET'
+    });
+    return (await response.json()).items[0] as {
+        assignments: {
+            fullName: string,
+            roleName: string
+        }[]
     };
 }
