@@ -1,7 +1,7 @@
 import { Button, CircularProgress, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchUserById, setCardNumber, setToken } from './exportSlice';
+import { fetchUserById, loadTokenDefaultValue, setCardNumber, setToken } from './exportSlice';
 
 import './Export.css';
 
@@ -11,6 +11,10 @@ export const Export = () => {
   const loading = useAppSelector((state) => state.export.loading);
   const items = useAppSelector((state) => state.export.items);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadTokenDefaultValue());
+  }, []);
 
   const [ready, setReady] = useState(false);
 

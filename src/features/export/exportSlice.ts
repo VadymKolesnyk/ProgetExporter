@@ -36,8 +36,15 @@ export const counterSlice = createSlice({
   name: 'export',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => ({ ...state, token: action.payload }),
+    setToken: (state, action: PayloadAction<string>) => {
+      localStorage.setItem('token', action.payload);
+      return { ...state, token: action.payload };
+    },
     setCardNumber: (state, action: PayloadAction<string>) => ({ ...state, cardNumber: action.payload }),
+    loadTokenDefaultValue: (state) => {
+      const token = localStorage.getItem('token');
+      return { ...state, token: token ?? '' };
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserById.fulfilled, (state, action) => {
@@ -97,6 +104,6 @@ export const fetchUserById = createAsyncThunk<Item[], void, AsyncThunkConfig>('e
   ).sort((a, b) => (a.developer ?? '').localeCompare(b.developer ?? ''));
 });
 
-export const { setToken, setCardNumber } = counterSlice.actions;
+export const { setToken, setCardNumber, loadTokenDefaultValue } = counterSlice.actions;
 
 export default counterSlice.reducer;
